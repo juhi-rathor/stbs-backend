@@ -1,0 +1,88 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node.js dependencies
+node_modules/
+jspm_packages/
+
+# Diagnostic / profiling
+*.pid
+*.seed
+*.pid.lock
+pids/
+coverage/
+*.lcov
+
+# Build outputs
+dist/
+build/
+out/
+tmp/
+temp/
+.cache/
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.turbo/
+.parcel-cache
+.vite/
+.vitest/
+
+# Framework-specific
+# Next.js / Nuxt / SvelteKit / Nest
+.next/
+out/
+.nuxt/
+.output/
+.svelte-kit/
+
+# Tooling artifacts
+*.tsbuildinfo        # TypeScript
+.eslintcache         # ESLint
+.cache-loader/
+bower_components/
+
+# Testing
+coverage/
+test-results/
+.vscode-test
+.playwright/
+cypress/videos/
+cypress/screenshots/
+
+# Environment files
+.env
+.env.*
+!.env.example
+src/config/firebaseConfig.json
+
+# Package manager caches & Plug'n'Play
+.npm/
+.pnp.*
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Archives
+*.tgz
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# REPL history
+.node_repl_history
+
+.txt
+/text.txt
