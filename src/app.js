@@ -47,6 +47,9 @@ app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 app.use(cookieParser());
 // CORS
 const origins = env.CORS_ORIGINS.split(",").map((o) => o.trim());
+if (!origins.includes("https://stbs-frontend.vercel.app")) {
+  origins.push("https://stbs-frontend.vercel.app");
+}
 app.use(
   cors({
     origin: origins,
