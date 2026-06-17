@@ -1,3 +1,6 @@
+const dns = require("node:dns");
+dns.setDefaultResultOrder("ipv4first");
+
 const env = require("./config/envConfig");
 const { connectMongoose } = require("./config/db");
 const app = require("./app");
