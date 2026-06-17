@@ -1,5 +1,10 @@
 const dns = require("node:dns");
 dns.setDefaultResultOrder("ipv4first");
+try {
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+} catch (e) {
+  console.warn("Could not set custom DNS servers:", e.message);
+}
 
 const env = require("./config/envConfig");
 const { connectMongoose } = require("./config/db");
@@ -10,6 +15,7 @@ connectMongoose()
   .then(() => {
     app.listen(env.PORT, async () => {
       logger.info(`Server started on port ${env.PORT}`);
+      console.log("Connecting to:", process.env.MONGO_URI);
     });
   })
   .catch((err) => {
