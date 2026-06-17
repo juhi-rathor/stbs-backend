@@ -67,6 +67,19 @@ app.use(requestLogger);
 // unified response helper
 app.use(responseMiddleware);
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+
+// Compression, Loggers wagera ke baad aur Routes ke upar ise add karein:
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Welcome to STBS Backend! The server is live and running.",
+  });
+});
+
+// Routes
+app.use("/api/v1", routes);
 // Routes
 app.use("/api/v1", routes);
 // 404 + error
