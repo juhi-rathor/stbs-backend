@@ -15,7 +15,6 @@ connectMongoose()
   .then(() => {
     app.listen(env.PORT, async () => {
       logger.info(`Server started on port ${env.PORT}`);
-      console.log("Connecting to:", process.env.MONGO_URI);
     });
   })
   .catch((err) => {
