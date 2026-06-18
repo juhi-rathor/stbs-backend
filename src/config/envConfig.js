@@ -36,7 +36,7 @@ const schema = Joi.object({
   REDIS_URL: Joi.string().allow(""),
   CORS_ORIGINS: Joi.string().default("http://localhost:3000"),
   COOKIE_SECURE: Joi.boolean().default(true),
-  FRONTEND_URL: Joi.string().default("http://localhost:3000"),
+  FRONTEND_URL: Joi.string().default("https://stbs-frontend.vercel.app"),
 }).unknown();
 
 const { value: validatedEnv, error } = schema

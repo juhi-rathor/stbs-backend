@@ -463,7 +463,8 @@ const getAllCustomers = catchAsync(async (req, res) => {
     filters.$or = [
       { name: regex },
       { businessName: regex },
-      { phone: regex },
+      { primaryPhone: regex },
+      { secondaryPhone: regex },
       { email: regex },
       { customerCode: regex },
     ];
@@ -606,11 +607,12 @@ const searchCustomer = catchAsync(async (req, res) => {
   const regex = new RegExp(searchValue, "i");
 
   let searchCriteria = [
+    { name: regex },
     { businessName: regex },
     { customerCode: regex },
     { email: regex },
-    { phone: regex },
-    { contactPerson: regex },
+    { primaryPhone: regex },
+    { secondaryPhone: regex },
     { category: regex },
     { customerType: regex },
 
@@ -629,7 +631,8 @@ const searchCustomer = catchAsync(async (req, res) => {
 
   // Numeric search case
   if (!isNaN(searchValue)) {
-    searchCriteria.push({ phone: searchValue });
+    searchCriteria.push({ primaryPhone: searchValue });
+    searchCriteria.push({ secondaryPhone: searchValue });
   }
 
   const customers = await Customer.find({
