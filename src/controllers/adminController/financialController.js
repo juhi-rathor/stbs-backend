@@ -810,7 +810,7 @@ const getOverduePayments = catchAsync(async (req, res) => {
 });
 
 const sendPaymentReceipt = catchAsync(async (req, res) => {
-  const { paymentId } = req.query;
+  const paymentId = req.query.paymentId || req.body.paymentId;
 
   if (!paymentId) {
     throw new AppError("paymentId is required", 400);
