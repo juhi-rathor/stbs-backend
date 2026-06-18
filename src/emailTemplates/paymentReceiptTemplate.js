@@ -1,5 +1,5 @@
 module.exports.paymentReceiptTemplate = ({ customer, invoice, payment }) => {
-  const isFullPaid = invoice.amountDue <= 0;
+  const isFullPaid = invoice ? invoice.amountDue <= 0 : false;
 
   return `
   <div style="font-family: Arial; max-width:600px; margin:auto;">
@@ -12,15 +12,15 @@ module.exports.paymentReceiptTemplate = ({ customer, invoice, payment }) => {
     <table width="100%" border="1" cellspacing="0" cellpadding="8">
       <tr>
         <td><b>Invoice No</b></td>
-        <td>${invoice.invoiceNo}</td>
+        <td>${invoice ? invoice.invoiceNo : "N/A"}</td>
       </tr>
       <tr>
         <td><b>Total Invoice Amount</b></td>
-        <td>₹${invoice.gross}</td>
+        <td>£${invoice ? invoice.gross : "N/A"}</td>
       </tr>
       <tr>
         <td><b>Amount Paid</b></td>
-        <td>₹${payment.credit}</td>
+        <td>£${payment.credit}</td>
       </tr>
       <tr>
         <td><b>Payment Method</b></td>
@@ -37,12 +37,14 @@ module.exports.paymentReceiptTemplate = ({ customer, invoice, payment }) => {
     </table>
     <br/>
     ${
-      isFullPaid
-        ? `<p style="color:green;"><b>✅ Invoice Fully Paid</b></p>`
-        : `<p style="color:orange;">
-             Partial Payment Received<br/>
-            <b>Remaining Amount Due: ₹${invoice.amountDue}</b>
-           </p>`
+      invoice
+        ? isFullPaid
+          ? `<p style="color:green;"><b>✅ Invoice Fully Paid</b></p>`
+          : `<p style="color:orange;">
+               Partial Payment Received<br/>
+              <b>Remaining Amount Due: £${invoice.amountDue}</b>
+             </p>`
+        : `<p style="color:green;"><b>Payment credited to account balance.</b></p>`
     }
     <p>Thank you for your business.</p>
     <p>Regards,<br/>Accounts Team</p>

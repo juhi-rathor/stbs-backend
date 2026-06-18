@@ -419,9 +419,9 @@ module.exports.sendPaymentReceiptMail = async ({ customer, invoice, payment }, r
 
   const html = await getTemplateHtml("payment_receipt", {
     "customer.businessName": customer.businessName,
-    "invoice.invoiceNo": invoice.invoiceNo,
-    "invoice.gross": Number(invoice.gross || 0).toFixed(2),
-    "invoice.amountDue": Number(invoice.amountDue || 0).toFixed(2),
+    "invoice.invoiceNo": invoice ? invoice.invoiceNo : "N/A",
+    "invoice.gross": invoice ? Number(invoice.gross || 0).toFixed(2) : "0.00",
+    "invoice.amountDue": invoice ? Number(invoice.amountDue || 0).toFixed(2) : "0.00",
     "payment.credit": Number(payment.credit || 0).toFixed(2),
     "payment.paymentMethod": payment.paymentMethod || "",
     "payment.referenceNo": payment.referenceNo || "N/A",
@@ -435,7 +435,7 @@ module.exports.sendPaymentReceiptMail = async ({ customer, invoice, payment }, r
   await transporter.sendMail({
     from: process.env.SMTP_USERNAME,
     to: customer.email,
-    subject: `Payment Receipt – ${invoice.invoiceNo}`,
+    subject: `Payment Receipt – ${invoice ? invoice.invoiceNo : "Account Credit"}`,
     html,
   });
 };
