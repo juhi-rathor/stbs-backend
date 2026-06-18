@@ -180,35 +180,46 @@ async function restoreStock(items) {
     const product = await Product.findById(item.product);
     if (!product) continue;
 
-    let qtyToRestore = item.qty;
+    const perPalletQty = product.qtyPerPallet || 1;
+    let qtyToRestore = item.qty; // quantity in pallets to restore to batches
+    let boardsToRestore = 0;
+
+    if (item.qtyType === "pallet") {
+      qtyToRestore = item.qty;
+      boardsToRestore = item.qty * perPalletQty;
+    } else {
+      qtyToRestore = item.qty / perPalletQty;
+      boardsToRestore = item.qty;
+    }
 
     // 🔁 Restore from LAST batches (reverse FIFO)
     for (let i = product.batches.length - 1; i >= 0; i--) {
       if (qtyToRestore <= 0) break;
 
       const batch = product.batches[i];
-      const maxCanRestore = batch.receivedQty - batch.remainingQty;
+      const maxCanRestore = batch.receivedPalletQty - batch.remainingQty;
 
       if (maxCanRestore <= 0) continue;
 
       if (maxCanRestore >= qtyToRestore) {
-        batch.remainingQty += qtyToRestore;
+        batch.remainingQty = Number((batch.remainingQty + qtyToRestore).toFixed(4));
         qtyToRestore = 0;
       } else {
-        batch.remainingQty += maxCanRestore;
+        batch.remainingQty = batch.receivedPalletQty;
         qtyToRestore -= maxCanRestore;
       }
     }
 
-    if (qtyToRestore > 0) {
+    if (qtyToRestore > 0.0001) {
       throw new AppError(
         `Restore mismatch for product: ${product.productName}`,
         400,
       );
     }
 
-    // ✅ recalc stockQty
+    // ✅ recalc stockQty and boardTotalQty
     product.stockQty = recalculateProductStockQty(product.batches);
+    product.boardTotalQty = Math.round(product.stockQty * perPalletQty);
 
     if (
       product.isLowStock === true &&
@@ -222,7 +233,7 @@ async function restoreStock(items) {
     await StockLedger.create({
       productId: product._id,
       productCode: product.productCode,
-      goodsIn: item.qty,
+      goodsIn: boardsToRestore,
       goodsOut: 0,
       boardLevel: product.boardTotalQty,
       palletLevel: product.stockQty,
